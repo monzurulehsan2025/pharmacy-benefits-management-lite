@@ -144,6 +144,19 @@ class CarePlanResponse(BaseModel):
     revision_id: str
     last_updated: datetime
 
+class AdherenceMedication(BaseModel):
+    name: str
+    pdc_score: float
+    status: str
+    last_fill_date: str
+    days_since_last_fill: int
+
+class AdherenceResponse(BaseModel):
+    member_id: str
+    overall_adherence_score: float
+    medications: List[AdherenceMedication]
+    recommendation: str
+
 # --- Endpoints ---
 
 @app.get("/api/v1/members/{member_id}", response_model=MemberProfile, tags=["Member Management"])
@@ -298,6 +311,31 @@ async def update_care_plan(member_id: str, plan: CarePlanUpdate):
         "status": "UPDATED",
         "revision_id": f"REV-{uuid.uuid4().hex[:3].upper()}",
         "last_updated": datetime.now()
+    }
+
+@app.get("/api/v1/clinical/adherence/{member_id}", response_model=AdherenceResponse, tags=["Clinical Decision Support"])
+async def get_medication_adherence(member_id: str):
+    """Calculates Proportion of Days Covered (PDC) and identifies gaps in medication therapy."""
+    return {
+        "member_id": member_id,
+        "overall_adherence_score": 0.88,
+        "medications": [
+          {
+            "name": "Metformin",
+            "pdc_score": 0.92,
+            "status": "ADHERENT",
+            "last_fill_date": "2024-05-01",
+            "days_since_last_fill": 19
+          },
+          {
+            "name": "Lisinopril",
+            "pdc_score": 0.75,
+            "status": "NON_ADHERENT",
+            "last_fill_date": "2024-04-10",
+            "days_since_last_fill": 40
+          }
+        ],
+        "recommendation": "High risk for Lisinopril gap. Initiate automated refill reminder."
     }
 
 if __name__ == "__main__":
