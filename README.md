@@ -289,6 +289,46 @@ GET /api/v1/analytics/cohort-health?group_id=GRP-HEALTHSTACK-TECH&metric=HbA1c_c
 }
 ```
 
+---
+
+### 11. Get Medication Adherence Metrics
+**Endpoint**: `GET /api/v1/clinical/adherence/{member_id}`
+**Description**: Calculates Proportion of Days Covered (PDC) and identifies gaps in medication therapy.
+
+**Sample Request**:
+```json
+{
+  "path_params": {
+    "member_id": "MEM-992834"
+  }
+}
+```
+
+**Sample Response**:
+```json
+{
+  "member_id": "MEM-992834",
+  "overall_adherence_score": 0.88,
+  "medications": [
+    {
+      "name": "Metformin",
+      "pdc_score": 0.92,
+      "status": "ADHERENT",
+      "last_fill_date": "2024-05-01",
+      "days_since_last_fill": 19
+    },
+    {
+      "name": "Lisinopril",
+      "pdc_score": 0.75,
+      "status": "NON_ADHERENT",
+      "last_fill_date": "2024-04-10",
+      "days_since_last_fill": 40
+    }
+  ],
+  "recommendation": "High risk for Lisinopril gap. Initiate automated refill reminder."
+}
+```
+
 ## 🏃 Getting Started
 
 1. **Install Dependencies**:

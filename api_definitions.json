@@ -265,5 +265,42 @@
         "last_updated": "2024-05-20T16:00:00Z"
       }
     }
+  },
+  {
+    "id": 11,
+    "name": "Get Medication Adherence Metrics",
+    "endpoint": "/api/v1/clinical/adherence/{member_id}",
+    "method": "GET",
+    "description": "Calculates Proportion of Days Covered (PDC) and identifies gaps in medication therapy.",
+    "request": {
+      "path_params": {
+        "member_id": "MEM-992834"
+      }
+    },
+    "response": {
+      "status_code": 200,
+      "body": {
+        "member_id": "MEM-992834",
+        "overall_adherence_score": 0.88,
+        "medications": [
+          {
+            "name": "Metformin",
+            "pdc_score": 0.92,
+            "status": "ADHERENT",
+            "last_fill_date": "2024-05-01",
+            "days_since_last_fill": 19
+          },
+          {
+            "name": "Lisinopril",
+            "pdc_score": 0.75,
+            "status": "NON_ADHERENT",
+            "last_fill_date": "2024-04-10",
+            "days_since_last_fill": 40
+          }
+        ],
+        "recommendation": "High risk for Lisinopril gap. Initiate automated refill reminder."
+      }
+    }
   }
+
 ]
