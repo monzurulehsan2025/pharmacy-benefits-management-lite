@@ -4,7 +4,7 @@ import pytest
 
 client = TestClient(app)
 
-def test_get_member_profile_success():
+def test_get_member_profile_found():
     """Test retrieving a valid member profile."""
     response = client.get("/api/v1/members/MEM-992834")
     assert response.status_code == 200
