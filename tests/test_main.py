@@ -57,3 +57,15 @@ def test_update_care_plan_success():
     assert data["member_id"] == "MEM-992834"
     assert data["status"] == "UPDATED"
     assert "revision_id" in data
+
+def test_get_medication_adherence_success():
+    """Test retrieving medication adherence metrics for the 11th API."""
+    response = client.get("/api/v1/clinical/adherence/MEM-992834")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["member_id"] == "MEM-992834"
+    assert "overall_adherence_score" in data
+    assert len(data["medications"]) == 2
+    assert data["medications"][0]["name"] == "Metformin"
+    assert data["medications"][0]["status"] == "ADHERENT"
+    assert "recommendation" in data
