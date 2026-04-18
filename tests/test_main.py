@@ -58,7 +58,7 @@ def test_update_care_plan_success():
     assert data["status"] == "UPDATED"
     assert "revision_id" in data
 
-def test_get_medication_adherence_success():
+def test_get_medication_adherence_success_v2():
     """Test retrieving medication adherence metrics for the 11th API."""
     response = client.get("/api/v1/clinical/adherence/MEM-992834")
     assert response.status_code == 200
