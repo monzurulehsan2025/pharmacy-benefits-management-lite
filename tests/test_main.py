@@ -71,7 +71,7 @@ def test_get_medication_adherence_success_v2():
     assert data["medications"][0]["status"] == "ADHERENT"
     assert "recommendation" in data
 
-def test_get_member_profile_latency():
+def test_snappiness_get_member_profile():
     """Test that retrieving a member profile is within acceptable latency limits."""
     start_time = time.time()
     response = client.get("/api/v1/members/MEM-992834")
@@ -80,7 +80,7 @@ def test_get_member_profile_latency():
     assert response.status_code == 200
     assert latency < 0.2, f"Latency too high: {latency}s"
 
-def test_process_claim_latency():
+def test_snappiness_process_claim():
     """Test that processing a claim is within acceptable latency limits."""
     claim_data = {
         "member_id": "MEM-992834",
