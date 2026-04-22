@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from main import app
 import pytest
+import time
 
 client = TestClient(app)
 
@@ -69,3 +70,28 @@ def test_get_medication_adherence_success_v2():
     assert data["medications"][0]["name"] == "Metformin"
     assert data["medications"][0]["status"] == "ADHERENT"
     assert "recommendation" in data
+
+def test_snappiness_get_member_profile():
+    """Test that retrieving a member profile is within acceptable latency limits."""
+    start_time = time.time()
+    response = client.get("/api/v1/members/MEM-992834")
+    end_time = time.time()
+    latency = end_time - start_time
+    assert response.status_code == 200
+    assert latency < 0.2, f"Latency too high: {latency}s"
+
+def test_snappiness_process_claim():
+    """Test that processing a claim is within acceptable latency limits."""
+    claim_data = {
+        "member_id": "MEM-992834",
+        "npi_id": "1234567890",
+        "ndc_code": "0002-3227-30",
+        "quantity": 30,
+        "days_supply": 30
+    }
+    start_time = time.time()
+    response = client.post("/api/v1/claims/process", json=claim_data)
+    end_time = time.time()
+    latency = end_time - start_time
+    assert response.status_code == 201
+    assert latency < 0.3, f"Latency too high: {latency}s"
